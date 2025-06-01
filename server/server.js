@@ -9,10 +9,22 @@ import userRouter from './routes/userRoutes.js';
 const app =express();
 const PORT=process.env.PORT ||4000;
 connectDb();
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://mern-auth-five-roan.vercel.app'
+];
+
 app.use(cors({
-  origin: true,
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS not allowed'));
+    }
+  },
   credentials: true
 }));
+
 app.use(express.json());
 app.use(cookieParser());
 app.get('/',(req,res)=>res.send("Hi welcome to node"))
